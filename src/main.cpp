@@ -5,30 +5,37 @@
 #include <Credentials.h>
 #include <OTA.h>
 #include <NTP.h>
+#include <TelnetStream.h>
 
 void setup()
 {
   Serial.begin(115200);
-  Serial.println("Booting");
+  Serial.println("setup() ...");
 
   setupOTA(wifi_hostname, wifi_SSID, wifi_password);
   setupNTP();
 
   //pinMode(LED_BUILTIN, OUTPUT);
+
+  Serial.println("done.");
 }
 
 void loop()
 {
-  handleOTA();
+  Serial.println("loop() ...");
+  TelnetStream.println("loop() ...");
 
-  // getNTPtime();
-  // showTime(timeinfo);
-  // delay(1000);
+  handleOTA();
+  getNTPtime();
+
+  //showTime();
 
   // digitalWrite(LED_BUILTIN, HIGH);
   // delay(1000);
   // digitalWrite(LED_BUILTIN, LOW);
   // delay(1000);
 
+  Serial.println("done.");
+  TelnetStream.println("done.");
   delay(1000);
 }
