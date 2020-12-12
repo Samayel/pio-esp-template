@@ -12,7 +12,6 @@
 
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
-#include <TelnetStream.h>
 
 #if defined(ESP32_RTOS) && defined(ESP32)
 void ota_handle(void *parameter)
@@ -52,7 +51,7 @@ void setupOTA(const char *nameprefix, const char *ssid, const char *password)
     // Wait for connection
     while (WiFi.waitForConnectResult() != WL_CONNECTED)
     {
-        Serial.println("Connection Failed! Rebooting...");
+        SerialChannel.println("Connection Failed! Rebooting...");
         delay(5000);
         ESP.restart();
     }
@@ -80,49 +79,48 @@ void setupOTA(const char *nameprefix, const char *ssid, const char *password)
         }
 
         // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
-        Serial.println("Start updating " + type);
+        SerialChannel.println("Start updating " + type);
     });
 
     ArduinoOTA.onEnd([]() {
-        Serial.println("\nEnd");
+        SerialChannel.println("\nEnd");
     });
 
     ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
-        Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+        SerialChannel.printf("Progress: %u%%\r", (progress / (total / 100)));
     });
 
     ArduinoOTA.onError([](ota_error_t error) {
-        Serial.printf("Error[%u]: ", error);
+        SerialChannel.printf("Error[%u]: ", error);
         if (error == OTA_AUTH_ERROR)
         {
-            Serial.println("\nAuth Failed");
+            SerialChannel.println("\nAuth Failed");
         }
         else if (error == OTA_BEGIN_ERROR)
         {
-            Serial.println("\nBegin Failed");
+            SerialChannel.println("\nBegin Failed");
         }
         else if (error == OTA_CONNECT_ERROR)
         {
-            Serial.println("\nConnect Failed");
+            SerialChannel.println("\nConnect Failed");
         }
         else if (error == OTA_RECEIVE_ERROR)
         {
-            Serial.println("\nReceive Failed");
+            SerialChannel.println("\nReceive Failed");
         }
         else if (error == OTA_END_ERROR)
         {
-            Serial.println("\nEnd Failed");
+            SerialChannel.println("\nEnd Failed");
         }
     });
 
     ArduinoOTA.begin();
-    TelnetStream.begin();
 
-    Serial.println("OTA initialized");
-    Serial.print("IP address: ");
-    Serial.println(WiFi.localIP());
-    Serial.print("Hostname: ");
-    Serial.println(ArduinoOTA.getHostname());
+    SerialChannel.println("OTA initialized");
+    SerialChannel.print("IP address: ");
+    SerialChannel.println(WiFi.localIP());
+    SerialChannel.print("Hostname: ");
+    SerialChannel.println(ArduinoOTA.getHostname());
 
 #if defined(ESP32_RTOS) && defined(ESP32)
     xTaskCreate(

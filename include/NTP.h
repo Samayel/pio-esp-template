@@ -25,7 +25,7 @@ bool getNTPtime()
 
 void showTime()
 {
-    Serial.printf(
+    SerialChannel.printf(
         "%04d-%02d-%02d %02d:%02d:%02d, day %d, %s time\n",
         localTime.tm_year + 1900,
         localTime.tm_mon + 1,
@@ -39,7 +39,7 @@ void showTime()
 
 void setupNTP()
 {
-    Serial.println("setupNTP() ...");
+    SerialChannel.println("setupNTP() ...");
 
     configTime(0, 0, NTP_SERVER1, NTP_SERVER2, NTP_SERVER3);
     setenv("TZ", NTP_TIMEZONE, 1);
@@ -47,5 +47,5 @@ void setupNTP()
     getNTPtime();
     showTime();
 
-    Serial.println("done.");
+    SerialChannel.println("done.");
 }

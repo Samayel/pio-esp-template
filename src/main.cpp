@@ -2,28 +2,31 @@
 #define ESP32_RTOS
 
 #include <Arduino.h>
+
 #include <Credentials.h>
+#include <SerialChannel.h>
+#include <TelnetChannel.h>
 #include <OTA.h>
 #include <NTP.h>
-#include <TelnetStream.h>
 
 void setup()
 {
-  Serial.begin(115200);
-  Serial.println("setup() ...");
+  setupSerialChannel();
+  SerialChannel.println("setup() ...");
 
   setupOTA(wifi_hostname, wifi_SSID, wifi_password);
+  setupTelnetChannel();
   setupNTP();
 
   //pinMode(LED_BUILTIN, OUTPUT);
 
-  Serial.println("done.");
+  SerialChannel.println("done.");
 }
 
 void loop()
 {
-  Serial.println("loop() ...");
-  TelnetStream.println("loop() ...");
+  SerialChannel.println("loop() ...");
+  TelnetChannel.println("loop() ...");
 
   handleOTA();
   getNTPtime();
@@ -35,7 +38,7 @@ void loop()
   // digitalWrite(LED_BUILTIN, LOW);
   // delay(1000);
 
-  Serial.println("done.");
-  TelnetStream.println("done.");
+  SerialChannel.println("done.");
+  TelnetChannel.println("done.");
   delay(1000);
 }
